@@ -13,7 +13,7 @@ def index():
         code = request.form.get('code')
         join = request.form.get('join', False)
         create = request.form.get('create', False)
-
+        print(name, code, join, create)
         if not name:
             return render_template(
                 'index.html',
@@ -29,7 +29,7 @@ def index():
             )
 
         room = code
-        if not create:
+        if create is not False:
             room = generate_unique_code(4)
             rooms[room] = {'members': 0, 'message': []}
         elif code not in rooms:
@@ -46,4 +46,7 @@ def index():
 
 @main.route("/room", methods=['POST', 'GET'])
 def room():
-    return render_template('chat.html')
+    room = session.get('room')
+    if room is None or session.get('name') is None or room not in rooms:
+        return redirect(url_for('main.index'))
+    return render_template('room.html', room=room)

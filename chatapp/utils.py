@@ -14,4 +14,4 @@ def generate_unique_code(length: int) -> str:
         if code not in rooms:
             break
 
-        return code
+    return code
