@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block title%}
+            Нет тайтла !
+        {% endblock %}
+    </title>
+    
+    <script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #e5e5e5;
+        }
+
+        #chat {
+            width: 50%;
+        }
+
+        #chat input {
+            width: 99%;
+        }
+
+        ul {
+            height: 500px;
+            background-color: white;
+            overflow-y: scroll;
+        }
+
+        li {
+            list-style: none;
+        }
+
+        #landing {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 10px;
+        }
+    </style>
+</head>
+    <body>
+        {% block content %}
+            Контент не подвезли :(
+        {% endblock %}
+    </body>
+
+
+</html>
