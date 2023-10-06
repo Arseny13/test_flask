@@ -1,6 +1,5 @@
-from chatapp import create_app, socketio
+from chatapp import app, socketio
 
-app = create_app()
 
 if __name__ == "__main__":
     socketio.run(app)

@@ -1,16 +1,17 @@
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
-from .events import socketio
-from .routes import main
 
+from .config import Config
 
-def create_app():
-    app = Flask(__name__)
-    app.config["DEBUG"] = True
-    app.config["SECRET_KEY"] = "secret"
+app = Flask(__name__)
+app.config.from_object(Config)
 
-    app.register_blueprint(main)
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
-    socketio.init_app(app)
+from .routes import main # noqa
+app.register_blueprint(main)
 
-    return app
+from .extensions import socketio # noqa
