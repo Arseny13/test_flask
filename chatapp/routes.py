@@ -1,8 +1,14 @@
-from flask import Blueprint, render_template, request, session, redirect, url_for
+from flask import (
+    Blueprint, render_template,
+    request, session,
+    redirect, url_for
+)
 
-from .utils import rooms, generate_unique_code
+from .models import Room
 
 main = Blueprint("main", __name__)
+
+rooms = {}
 
 
 @main.route("/", methods=['POST', 'GET'])
@@ -30,9 +36,9 @@ def index():
 
         room = code
         if create is not False:
-            room = generate_unique_code(4)
+            room = Room.generate_room().code
             rooms[room] = {'members': 0, 'message': []}
-        elif code not in rooms:
+        elif Room.search_code(code) is None:
             return render_template(
                 'index.html', error='This room does not exis',
                 code=code, name=name
@@ -47,6 +53,10 @@ def index():
 @main.route("/room", methods=['POST', 'GET'])
 def room():
     room = session.get('room')
-    if room is None or session.get('name') is None or room not in rooms:
+
+    if (
+        room is None or session.get('name') is None or
+        Room.search_code(room) is None
+    ):
         return redirect(url_for('main.index'))
     return render_template('room.html', room=room)
