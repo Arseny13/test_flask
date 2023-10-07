@@ -1,20 +1,49 @@
-from flask import request
-from flask_socketio import emit
+from flask import request, session
+from flask_socketio import emit, join_room, leave_room, send
 
+from .models import Room
+from . import db
 from .extensions import socketio
 
 users = {}
 
 
 @socketio.on("connect")
-def handle_connect():
-    print("Client connected!")
+def connect(auth):
+    """Запускатся при подключении?"""
+    code = session.get('code')
+    name = session.get('name')
+    room = Room.search_code(code)
+    if not code or not name:
+        return
+    if room is None:
+        leave_room(code)
+        return
+
+    join_room(code)
+    send({"name": name, "message": "has entered the room"}, to=room)
+    room.members += 1
+    db.session.add(room)
+    db.session.commit()
+    print(f'{name} joined room {code}')
 
 
-@socketio.on("user_join")
-def handle_user_join(username):
-    print(f"User {username} joined!")
-    users[username] = request.sid
+@socketio.on("disconnect")
+def disconnect():
+    code = session.get('code')
+    name = session.get('name')
+    leave_room(code)
+    room = Room.search_code(code)
+    if room is not None:
+        room.members -= 1
+        db.session.add(room)
+        db.session.commit()
+        if room.members <= 0:
+            db.session.delete(room)
+            db.session.commit()
+
+    send({"name": name, "message": "has left the room"}, to=code)
+    print(f'{name} left room {code}')
 
 
 @socketio.on("new_message")

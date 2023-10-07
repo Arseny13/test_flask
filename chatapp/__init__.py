@@ -14,4 +14,4 @@ migrate = Migrate(app, db)
 from .routes import main # noqa
 app.register_blueprint(main)
 
-from .extensions import socketio # noqa
+from .events import socketio # noqa

@@ -37,14 +37,13 @@ def index():
         room = code
         if create is not False:
             room = Room.generate_room().code
-            rooms[room] = {'members': 0, 'message': []}
         elif Room.search_code(code) is None:
             return render_template(
                 'index.html', error='This room does not exis',
                 code=code, name=name
             )
 
-        session['room'] = room
+        session['code'] = room
         session['name'] = name
         return redirect(url_for('main.room'))
     return render_template('index.html')
@@ -52,11 +51,11 @@ def index():
 
 @main.route("/room", methods=['POST', 'GET'])
 def room():
-    room = session.get('room')
+    code = session.get('code')
 
     if (
-        room is None or session.get('name') is None or
-        Room.search_code(room) is None
+        code is None or session.get('name') is None or
+        Room.search_code(code) is None
     ):
         return redirect(url_for('main.index'))
-    return render_template('room.html', room=room)
+    return render_template('room.html', code=code)

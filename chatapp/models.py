@@ -11,6 +11,7 @@ class Room(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     code = db.Column(db.String(4), unique=True, nullable=False)
+    members = db.Column(db.Integer,)
 
     @staticmethod
     def generate_room() -> Room:
@@ -21,7 +22,7 @@ class Room(db.Model):
                 code += random.choice(string.ascii_uppercase)
 
             if Room.query.filter_by(code=code).first() is None:
-                room = Room(code=code)
+                room = Room(code=code, members=0)
                 db.session.add(room)
                 db.session.commit()
                 break
