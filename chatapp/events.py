@@ -21,7 +21,7 @@ def connect(auth):
         return
 
     join_room(code)
-    send({"name": name, "message": "has entered the room"}, to=room)
+    send({"name": name, "message": "has entered the room"}, to=code)
     room.members += 1
     db.session.add(room)
     db.session.commit()
@@ -44,6 +44,22 @@ def disconnect():
 
     send({"name": name, "message": "has left the room"}, to=code)
     print(f'{name} left room {code}')
+
+
+@socketio.on("message")
+def message(data):
+    code = session.get("code")
+    room = Room.search_code(code)
+    if room is not None:
+        return
+
+    content = {
+        "name": session.get("name"),
+        "message": data["data"]
+    }
+    send(content, to=room)
+    # rooms[room]["messages"].append(content)
+    print(f"{session.get('name')} said: {data['data']}")
 
 
 @socketio.on("new_message")
