@@ -50,14 +50,15 @@ def disconnect():
 def message(data):
     code = session.get("code")
     room = Room.search_code(code)
-    if room is not None:
+    if room is None:
         return
-
     content = {
         "name": session.get("name"),
         "message": data["data"]
     }
-    send(content, to=room)
+    print('11111')
+    print(content)
+    send(content, to=code)
     # rooms[room]["messages"].append(content)
     print(f"{session.get('name')} said: {data['data']}")
 
