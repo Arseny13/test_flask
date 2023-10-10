@@ -2,7 +2,7 @@ from __future__ import annotations
 import random
 import string
 
-from . import db
+from main import db
 
 
 class Room(db.Model):

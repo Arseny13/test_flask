@@ -2,7 +2,7 @@ from flask import request, session
 from flask_socketio import emit, join_room, leave_room, send
 
 from .models import Room
-from . import db
+from main import db
 from .extensions import socketio
 
 users = {}

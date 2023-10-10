@@ -11,7 +11,7 @@ app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-from .routes import main # noqa
+from chatapp.routes import main # noqa
 app.register_blueprint(main)
 
-from .events import socketio # noqa
+from chatapp.events import socketio # noqa

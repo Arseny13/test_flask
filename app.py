@@ -1,4 +1,4 @@
-from chatapp import app, socketio, db
+from main import app, socketio, db
 
 
 with app.app_context():

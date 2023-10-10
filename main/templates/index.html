@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title%}
+    Main page
+{% endblock %}
+{% block content %}
+  <a class="navbar-brand" href="{{ url_for('main.chat')  }}">
+    перейти в чаты
+  </a>
+{% endblock %}
